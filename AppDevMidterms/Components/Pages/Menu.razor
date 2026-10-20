@@ -1,0 +1,109 @@
+﻿@page "/menu"
+<PageTitle>Menu | Shiki 四季</PageTitle>
+@* ===== HEADER + BANNER ===== *@
+<section class="border-b border-white/10 bg-[radial-gradient(ellipse_at_top,rgba(184,155,94,0.12),transparent_60%)] px-6 pb-16 pt-24 text-center">
+    <div class="animate-fade-up">
+        <p class="text-xs uppercase tracking-[0.5em] text-gold">Shiki · Menu</p>
+        <h1 class="mt-6 text-5xl md:text-6xl">The Counter Menu</h1>
+        <p class="mx-auto mt-6 max-w-xl text-mist">
+            Offerings change with the market and the season. Please inform us
+            of any allergies when you reserve.
+        </p>
+    </div>
+    <div class="mx-auto mt-14 max-w-6xl">
+        <ImageFrame Class="aspect-[21/9]" Src="@BannerImage" Alt="Sushi counter at Shiki" Placeholder="味" />
+    </div>
+</section>
+@* ===== CATEGORY TABS + ITEMS ===== *@
+<section class="mx-auto max-w-4xl px-6 py-20">
+    <div class="flex flex-wrap justify-center gap-3">
+        @foreach (var category in categories)
+        {
+            <button @onclick="() => selected = category" class="@TabClass(category)">
+                @category
+            </button>
+        }
+    </div>
+    <div class="mt-12 divide-y divide-white/10">
+        @foreach (var item in Filtered)
+        {
+            <div @key="item.Name" class="flex gap-6 py-6">
+                @if (!string.IsNullOrWhiteSpace(item.Image))
+                {
+                    <ImageFrame Class="h-24 w-24 shrink-0" Src="@item.Image" Alt="@item.Name" />
+                }
+                <div class="flex-1">
+                    <div class="flex items-baseline gap-4">
+                        <h3 class="text-2xl">@item.Name</h3>
+                        <span class="flex-1 border-b border-dotted border-white/20"></span>
+                        <span class="text-gold">@item.Price</span>
+                    </div>
+                    <p class="mt-2 text-sm leading-relaxed text-mist">@item.Description</p>
+                </div>
+            </div>
+        }
+    </div>
+</section>
+@* ===== SEASONAL OMAKASE HIGHLIGHT ===== *@
+<section class="border-t border-white/10 bg-[#100e0c] py-24">
+    <div class="mx-auto grid max-w-6xl items-center gap-12 px-6 md:grid-cols-2">
+        <ImageFrame Class="aspect-[4/5]" Src="@OmakaseImage" Alt="Seasonal omakase course" Placeholder="秋" />
+        <div class="rounded-sm border border-gold/50 p-10">
+            <p class="text-xs uppercase tracking-[0.4em] text-gold">Autumn Omakase</p>
+            <h2 class="mt-4 text-4xl">Aki no Kaiseki</h2>
+            <div class="mt-6 h-px w-16 bg-shu"></div>
+            <ul class="mt-6 space-y-2 text-sm text-mist">
+                @foreach (var course in courses)
+                {
+                    <li class="flex gap-3"><span class="text-shu">◆</span>@course</li>
+                }
+            </ul>
+            <p class="mt-8 font-serif text-3xl text-gold">₱6,500 <span class="text-sm text-mist">per guest</span></p>
+            <a href="/reservation"
+               class="mt-8 inline-block rounded-sm bg-shu px-8 py-3 text-sm uppercase tracking-widest transition hover:bg-shu/80">
+                Reserve Omakase
+            </a>
+        </div>
+    </div>
+</section>
+@code {
+    // Set these to e.g. "images/menu-banner.jpg" once you add the photos
+    private const string BannerImage = "images/menu-banner.jpg";
+    private const string OmakaseImage = "images/omakase-banner.jpg";
+    private record MenuItem(string Category, string Name, string Description, string Price, string? Image = null);
+    private readonly string[] categories = ["Omakase", "Nigiri", "Sashimi", "Small Plates", "Drinks"];
+    private string selected = "Omakase";
+    private readonly string[] courses =
+    [
+        "Chawanmushi with ginkgo and matsutake",
+        "Seasonal sashimi, three cuts",
+        "Eight pieces of Edomae nigiri",
+        "Grilled sanma with grated daikon",
+        "Akadashi miso and hand roll",
+        "Persimmon and houjicha"
+    ];
+    private readonly List<MenuItem> items =
+    [
+        new("Omakase", "Seasonal Omakase", "Fifteen courses led by the chef, built around today's best catch.", "₱6,500"),
+        new("Omakase", "Premium Omakase", "Eighteen courses featuring otoro, uni, and A5 wagyu.", "₱9,800"),
+        new("Omakase", "Chef's Counter", "The full experience with sake pairing, limited to four seats nightly.", "₱12,500"),
+        new("Nigiri", "Madai", "Japanese sea bream, lightly cured with kombu.", "₱420"),
+        new("Nigiri", "Akami", "Lean bluefin tuna, soy-marinated in the Edomae style.", "₱480"),
+        new("Nigiri", "Hotate", "Hokkaido scallop, brushed with sea salt and yuzu.", "₱520"),
+        new("Nigiri", "Anago", "Simmered sea eel with sweet tsume glaze.", "₱450"),
+        new("Sashimi", "Hamachi", "Yellowtail with fresh wasabi and citrus soy.", "₱780"),
+        new("Sashimi", "Sake Belly", "Rich salmon belly, sliced thick.", "₱720"),
+        new("Sashimi", "Sashimi Moriawase", "Chef's selection of five seasonal fish.", "₱1,650"),
+        new("Small Plates", "Chawanmushi", "Silky egg custard with shrimp and shiitake.", "₱380"),
+        new("Small Plates", "Agedashi Tofu", "Crisp tofu in warm dashi with grated ginger.", "₱320"),
+        new("Small Plates", "Wagyu Tataki", "Seared A5 wagyu with ponzu and daikon.", "₱1,800"),
+        new("Drinks", "Junmai Daiginjo", "Chilled premium sake, by the glass.", "₱650"),
+        new("Drinks", "Yuzu Highball", "Japanese whisky, yuzu, and soda.", "₱480"),
+        new("Drinks", "Houjicha", "Roasted green tea, served hot.", "₱180")
+    ];
+    private IEnumerable<MenuItem> Filtered => items.Where(i => i.Category == selected);
+    private string TabClass(string category) =>
+        category == selected
+            ? "rounded-sm border border-gold bg-gold px-6 py-2 text-sm uppercase tracking-widest text-ink transition"
+            : "rounded-sm border border-white/15 px-6 py-2 text-sm uppercase tracking-widest text-mist transition hover:border-gold/60 hover:text-washi";
+}

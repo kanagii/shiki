@@ -1,0 +1,36 @@
+﻿@import "tailwindcss";
+
+@theme {
+    --color-ink: #14110f;
+    --color-charcoal: #1f1b18;
+    --color-washi: #f2ebdd;
+    --color-mist: #a39b8f;
+    --color-shu: #c8452d;
+    --color-gold: #b89b5e;
+    --font-serif: "Cormorant Garamond", Georgia, serif;
+    --font-sans: "Inter", system-ui, sans-serif;
+    --animate-fade-up: fade-up 0.9s ease-out both;
+
+    @keyframes fade-up {
+        from {
+            opacity: 0;
+            transform: translateY(16px);
+        }
+
+        to {
+            opacity: 1;
+            transform: translateY(0);
+        }
+    }
+}
+
+@layer base {
+    html {
+        background-color: var(--color-ink);
+        scroll-behavior: smooth;
+    }
+
+    h1, h2, h3 {
+        font-family: var(--font-serif);
+    }
+}

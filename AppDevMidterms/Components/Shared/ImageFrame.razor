@@ -1,0 +1,21 @@
+﻿<div class="group relative overflow-hidden rounded-sm border border-white/10 bg-charcoal @Class">
+    @if (!string.IsNullOrWhiteSpace(Src))
+    {
+        <img src="@Src" alt="@Alt" loading="lazy"
+             class="absolute inset-0 h-full w-full object-cover object-center transition duration-700 group-hover:scale-105" />
+    }
+    else
+    {
+        <div class="absolute inset-0 flex items-center justify-center bg-[linear-gradient(160deg,#2a2420,#14110f)]">
+            <span class="font-serif text-7xl text-shu/60">@Placeholder</span>
+        </div>
+    }
+    @ChildContent
+</div>
+@code {
+    [Parameter] public string? Src { get; set; }
+    [Parameter] public string Alt { get; set; } = "";
+    [Parameter] public string Class { get; set; } = "";
+    [Parameter] public string Placeholder { get; set; } = "食";
+    [Parameter] public RenderFragment? ChildContent { get; set; }
+}

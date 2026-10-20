@@ -1,0 +1,26 @@
+<article class="group overflow-hidden rounded-sm border border-white/10 bg-charcoal transition duration-500 hover:-translate-y-2 hover:border-gold/60">
+    @if (HasImage)
+    {
+        <div class="relative aspect-[4/3] overflow-hidden">
+            <img src="@Image" alt="@Name" loading="lazy"
+                 class="absolute inset-0 h-full w-full object-cover object-center transition duration-700 group-hover:scale-105" />
+        </div>
+    }
+    <div class="p-8">
+        @if (!HasImage)
+        {
+            <p class="font-serif text-5xl text-gold/40 transition duration-500 group-hover:text-gold">@Kanji</p>
+        }
+        <h3 class="@(HasImage ? "" : "mt-6") text-2xl">@Name</h3>
+        <p class="mt-3 text-sm leading-relaxed text-mist">@Description</p>
+        <p class="mt-6 border-t border-white/10 pt-4 text-gold">@Price</p>
+    </div>
+</article>
+@code {
+    [Parameter] public string Kanji { get; set; } = "";
+    [Parameter, EditorRequired] public string Name { get; set; } = "";
+    [Parameter] public string Description { get; set; } = "";
+    [Parameter] public string Price { get; set; } = "";
+    [Parameter] public string? Image { get; set; }
+    private bool HasImage => !string.IsNullOrWhiteSpace(Image);
+}

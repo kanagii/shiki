@@ -1,0 +1,94 @@
+﻿@inherits LayoutComponentBase
+
+<div class="flex min-h-screen flex-col bg-ink font-sans font-light text-washi">
+
+    <header class="sticky top-0 z-50 border-b border-white/10 bg-ink/80 backdrop-blur">
+        <nav class="mx-auto flex max-w-6xl items-center justify-between px-6 py-4">
+            <a href="/" class="font-serif text-2xl tracking-[0.3em] text-washi" @onclick="Close">
+                SHIKI <span class="text-shu">四季</span>
+            </a>
+
+            <ul class="hidden items-center gap-10 md:flex">
+                @foreach (var link in links)
+                {
+                    <li>
+                        <NavLink href="@link.Href"
+                                 Match="@(link.Href == "/" ? NavLinkMatch.All : NavLinkMatch.Prefix)"
+                                 ActiveClass="text-gold after:w-full"
+                                 class="relative text-sm uppercase tracking-widest text-mist transition-colors hover:text-washi after:absolute after:-bottom-1 after:left-0 after:h-px after:w-0 after:bg-gold after:transition-all after:duration-300 hover:after:w-full">
+                            @link.Label
+                        </NavLink>
+                    </li>
+                }
+            </ul>
+
+            <a href="/reservation"
+               class="hidden rounded-sm bg-shu px-5 py-2 text-sm uppercase tracking-widest text-washi transition hover:bg-shu/80 md:inline-block">
+                Reserve
+            </a>
+
+            <button class="text-2xl md:hidden" @onclick="Toggle" aria-label="Toggle menu">
+                @(menuOpen ? "✕" : "☰")
+            </button>
+        </nav>
+
+        @if (menuOpen)
+        {
+            <ul class="space-y-4 border-t border-white/10 bg-charcoal px-6 py-6 md:hidden">
+                @foreach (var link in links)
+                {
+                    <li>
+                        <a href="@link.Href" @onclick="Close"
+                           class="block text-sm uppercase tracking-widest text-mist hover:text-washi">
+                            @link.Label
+                        </a>
+                    </li>
+                }
+            </ul>
+        }
+    </header>
+
+    <main class="flex-1">
+        @Body
+    </main>
+
+    <footer class="border-t border-white/10 bg-charcoal">
+        <div class="mx-auto grid max-w-6xl gap-8 px-6 py-12 text-sm text-mist md:grid-cols-3">
+            <div>
+                <p class="font-serif text-xl tracking-[0.3em] text-washi">SHIKI 四季</p>
+                <p class="mt-3">Edomae omakase, shaped by the seasons.</p>
+            </div>
+            <div>
+                <p class="mb-3 uppercase tracking-widest text-gold">Hours</p>
+                <p>Tue – Sun: 5:30 pm – 10:30 pm</p>
+                <p>Monday: Closed</p>
+            </div>
+            <div>
+                <p class="mb-3 uppercase tracking-widest text-gold">Find us</p>
+                <p>12 Sakura Lane, Biringan City</p>
+                <p>+63 900 000 0000</p>
+            </div>
+        </div>
+        <p class="border-t border-white/5 py-4 text-center text-xs text-mist">© 2026 Shiki. All rights reserved.</p>
+    </footer>
+</div>
+
+<div id="blazor-error-ui" data-nosnippet>
+    An unhandled error has occurred.
+    <a href="." class="reload">Reload</a>
+    <span class="dismiss">🗙</span>
+</div>
+
+@code {
+    private bool menuOpen;
+
+    private readonly (string Href, string Label)[] links =
+    [
+        ("/", "Home"),
+        ("/menu", "Menu"),
+        ("/reservation", "Reservation")
+    ];
+
+    private void Toggle() => menuOpen = !menuOpen;
+    private void Close() => menuOpen = false;
+}

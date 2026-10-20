@@ -1,0 +1,197 @@
+﻿@page "/reservation"
+@using System.ComponentModel.DataAnnotations
+<PageTitle>Reservation | Shiki 四季</PageTitle>
+@* ===== HEADER ===== *@
+<section class="border-b border-white/10 bg-[radial-gradient(ellipse_at_top,rgba(200,69,45,0.15),transparent_60%)] px-6 pb-16 pt-24 text-center">
+    <div class="animate-fade-up">
+        <p class="text-xs uppercase tracking-[0.5em] text-gold">ご予約 · Reservations</p>
+        <h1 class="mt-6 text-5xl md:text-6xl">Reserve your seat</h1>
+        <p class="mx-auto mt-6 max-w-xl text-mist">
+            Twelve seats, two seatings each evening. Book early, as the counter fills quickly.
+        </p>
+    </div>
+    <div class="mx-auto mt-14 max-w-6xl">
+        <ImageFrame Class="aspect-[21/9]" Src="@HeaderImage" Alt="Shiki dining room" Placeholder="席" />
+    </div>
+</section>
+<section class="mx-auto grid max-w-6xl gap-12 px-6 py-20 lg:grid-cols-5">
+    @* ===== FORM / CONFIRMATION ===== *@
+    <div class="lg:col-span-3">
+        @if (submitted)
+        {
+            <div class="animate-fade-up rounded-sm border border-gold/50 bg-charcoal p-10 text-center">
+                <p class="font-serif text-6xl text-shu">済</p>
+                <h2 class="mt-6 text-3xl">Thank you, @model.Name</h2>
+                <p class="mt-3 text-mist">Your reservation request has been received.</p>
+                <dl class="mx-auto mt-8 max-w-sm space-y-3 border-y border-white/10 py-6 text-left text-sm">
+                    <div class="flex justify-between"><dt class="text-mist">Reference</dt><dd class="text-gold">@reference</dd></div>
+                    <div class="flex justify-between"><dt class="text-mist">Date</dt><dd>@model.Date?.ToString("dddd, d MMMM yyyy")</dd></div>
+                    <div class="flex justify-between"><dt class="text-mist">Time</dt><dd>@model.Time</dd></div>
+                    <div class="flex justify-between"><dt class="text-mist">Guests</dt><dd>@model.Guests</dd></div>
+                </dl>
+                <p class="mt-6 text-sm text-mist">A confirmation will be sent to @model.Email.</p>
+                <button @onclick="Reset"
+                        class="mt-8 rounded-sm border border-gold/60 px-8 py-3 text-sm uppercase tracking-widest text-gold transition hover:bg-gold hover:text-ink">
+                    Make another reservation
+                </button>
+            </div>
+        }
+        else
+        {
+            <EditForm Model="model" OnValidSubmit="Submit" class="space-y-6 rounded-sm border border-white/10 bg-charcoal p-8 md:p-10">
+                <DataAnnotationsValidator />
+                <div>
+                    <label class="@Label">Full name</label>
+                    <InputText @bind-Value="model.Name" class="@Field" placeholder="Your name" />
+                    <ValidationMessage For="() => model.Name" />
+                </div>
+                <div class="grid gap-6 md:grid-cols-2">
+                    <div>
+                        <label class="@Label">Email</label>
+                        <InputText @bind-Value="model.Email" class="@Field" placeholder="you@example.com" />
+                        <ValidationMessage For="() => model.Email" />
+                    </div>
+                    <div>
+                        <label class="@Label">Phone</label>
+                        <InputText @bind-Value="model.Phone" class="@Field" placeholder="+63 900 000 0000" />
+                        <ValidationMessage For="() => model.Phone" />
+                    </div>
+                </div>
+                <div class="grid gap-6 md:grid-cols-3">
+                    <div>
+                        <label class="@Label">Date</label>
+                        <InputDate @bind-Value="model.Date" class="@Field" min="@MinDate" />
+                        <ValidationMessage For="() => model.Date" />
+                    </div>
+                    <div>
+                        <label class="@Label">Time</label>
+                        <InputSelect @bind-Value="model.Time" class="@SelectField">
+                            <option value="">Select a time</option>
+                            @foreach (var slot in timeSlots)
+                            {
+                                <option value="@slot">@slot</option>
+                            }
+                        </InputSelect>
+                        <ValidationMessage For="() => model.Time" />
+                    </div>
+                    <div>
+                        <label class="@Label">Guests</label>
+                        <InputSelect @bind-Value="model.Guests" class="@SelectField">
+                            @for (var i = 1; i <= 8; i++)
+                            {
+                                <option value="@i">@i @(i == 1 ? "guest" : "guests")</option>
+                            }
+                        </InputSelect>
+                        <ValidationMessage For="() => model.Guests" />
+                    </div>
+                </div>
+                <div>
+                    <label class="@Label">Dietary notes & allergies <span class="normal-case tracking-normal">(optional)</span></label>
+                    <InputTextArea @bind-Value="model.Notes" rows="4" class="@Field" placeholder="Shellfish allergy, no raw egg, celebrating an anniversary..." />
+                    <ValidationMessage For="() => model.Notes" />
+                </div>
+                <div>
+                    <label class="flex items-start gap-3 text-sm text-mist">
+                        <InputCheckbox @bind-Value="model.Agree" class="mt-1 accent-[#c8452d]" />
+                        <span>I have read and agree to the dining guidelines.</span>
+                    </label>
+                    <ValidationMessage For="() => model.Agree" />
+                </div>
+                <button type="submit"
+                        class="w-full rounded-sm bg-shu px-8 py-4 text-sm uppercase tracking-widest transition hover:bg-shu/80">
+                    Confirm Reservation
+                </button>
+            </EditForm>
+        }
+    </div>
+    @* ===== LOCATION & GUIDELINES ===== *@
+    <aside class="space-y-8 lg:col-span-2">
+        <div class="rounded-sm border border-white/10 bg-charcoal p-8">
+            <p class="text-xs uppercase tracking-[0.4em] text-gold">Find us</p>
+            <p class="mt-4">12 Sakura Lane, Biringan City</p>
+            <p class="text-mist">+63 900 000 0000</p>
+            <ImageFrame Class="mt-6 aspect-video" Src="images/location.jpg" Alt="Shiki exterior" Placeholder="地図" />
+            <p class="mt-6 text-xs uppercase tracking-[0.4em] text-gold">Hours</p>
+            <p class="mt-3 text-sm text-mist">Tue – Sun: 5:30 pm – 10:30 pm</p>
+            <p class="text-sm text-mist">Monday: Closed</p>
+        </div>
+        <div class="rounded-sm border border-gold/40 p-8">
+            <p class="text-xs uppercase tracking-[0.4em] text-gold">Dining guidelines</p>
+            <ul class="mt-5 space-y-3 text-sm text-mist">
+                @foreach (var rule in guidelines)
+                {
+                    <li class="flex gap-3"><span class="text-shu">◆</span>@rule</li>
+                }
+            </ul>
+        </div>
+    </aside>
+</section>
+@code {
+    // Set to e.g. "images/reservation-banner.jpg" once you add the photo
+    private const string HeaderImage = "images/reservation-banner.jpg";
+    private const string Label = "block text-xs uppercase tracking-widest text-mist";
+    private const string Field = "mt-2 w-full rounded-sm border border-white/15 bg-ink px-4 py-3 text-sm text-washi placeholder:text-mist/50 transition focus:border-gold focus:outline-none [color-scheme:dark]";
+    private const string SelectField = Field + " [&_option]:bg-charcoal";
+    private static string MinDate => DateTime.Today.ToString("yyyy-MM-dd");
+    private ReservationModel model = new();
+    private bool submitted;
+    private string reference = "";
+    private readonly string[] timeSlots =
+    [
+        "5:30 pm", "6:00 pm", "6:30 pm", "7:00 pm",
+        "7:30 pm", "8:00 pm", "8:30 pm", "9:00 pm"
+    ];
+    private readonly string[] guidelines =
+    [
+        "Please arrive on time. Omakase begins promptly, and seats are held for 15 minutes.",
+        "Tell us about allergies or dietary needs when you book, at least 24 hours ahead.",
+        "Smart casual attire is recommended. Please avoid strong fragrances at the counter.",
+        "Cancellations are free up to 24 hours before your seating.",
+        "Online bookings are limited to 8 guests. For larger parties, please call us."
+    ];
+    private void Submit()
+    {
+        reference = "SK-" + Random.Shared.Next(1000, 9999);
+        submitted = true;
+    }
+    private void Reset()
+    {
+        model = new();
+        submitted = false;
+    }
+    public class ReservationModel
+    {
+        [Required(ErrorMessage = "Please enter your name.")]
+        [StringLength(60, MinimumLength = 2, ErrorMessage = "Name must be 2 to 60 characters.")]
+        public string Name { get; set; } = "";
+        [Required(ErrorMessage = "Email is required.")]
+        [EmailAddress(ErrorMessage = "Please enter a valid email address.")]
+        public string Email { get; set; } = "";
+        [Required(ErrorMessage = "Phone number is required.")]
+        [RegularExpression(@"^[0-9+\-\s()]{7,15}$", ErrorMessage = "Please enter a valid phone number.")]
+        public string Phone { get; set; } = "";
+        [Required(ErrorMessage = "Please choose a date.")]
+        [OpenDay]
+        public DateTime? Date { get; set; }
+        [Required(ErrorMessage = "Please choose a time.")]
+        public string Time { get; set; } = "";
+        [Range(1, 8, ErrorMessage = "Online bookings are for 1 to 8 guests.")]
+        public int Guests { get; set; } = 2;
+        [StringLength(250, ErrorMessage = "Notes must be 250 characters or fewer.")]
+        public string? Notes { get; set; }
+        [Range(typeof(bool), "true", "true", ErrorMessage = "Please accept the dining guidelines.")]
+        public bool Agree { get; set; }
+    }
+    public class OpenDayAttribute : ValidationAttribute
+    {
+        protected override ValidationResult? IsValid(object? value, ValidationContext context)
+        {
+            if (value is not DateTime date) return ValidationResult.Success;
+            if (date.Date < DateTime.Today)
+                return new ValidationResult("Please choose today or a future date.");
+            if (date.DayOfWeek == DayOfWeek.Monday)
+                return new ValidationResult("We are closed on Mondays.");
+            return ValidationResult.Success;
+        }
+    }
+}

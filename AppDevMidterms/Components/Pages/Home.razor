@@ -1,0 +1,91 @@
+﻿@page "/"
+
+<PageTitle>Shiki 四季 | Edomae Omakase</PageTitle>
+
+@* ===== HERO ===== *@
+<section class="relative flex min-h-[calc(100vh-73px)] items-center justify-center overflow-hidden bg-[radial-gradient(ellipse_at_top,rgba(200,69,45,0.18),transparent_60%)] px-6 text-center">
+    <span class="pointer-events-none absolute right-10 top-16 hidden select-none font-serif text-8xl text-white/5 [writing-mode:vertical-rl] lg:block">寿司</span>
+
+    <img src="images/hero.jpg" alt="" class="absolute inset-0 h-full w-full object-cover object-center opacity-40" />
+    <div class="absolute inset-0 bg-gradient-to-b from-ink/60 via-ink/40 to-ink"></div>
+
+    <div class="animate-fade-up">
+        <p class="text-xs uppercase tracking-[0.5em] text-gold">Edomae Omakase</p>
+        <h1 class="mt-6 text-5xl leading-tight md:text-7xl">
+            Dining, shaped<br />by the seasons
+        </h1>
+        <p class="mx-auto mt-6 max-w-xl text-mist">
+            Twelve seats. One counter. A tasting journey guided by the finest
+            catch of the day and the quiet craft of our chefs.
+        </p>
+        <div class="mt-10 flex flex-col items-center justify-center gap-4 sm:flex-row">
+            <a href="/reservation"
+               class="rounded-sm bg-shu px-8 py-3 text-sm uppercase tracking-widest transition hover:bg-shu/80">
+                Reserve a Table
+            </a>
+            <a href="/menu"
+               class="rounded-sm border border-gold/60 px-8 py-3 text-sm uppercase tracking-widest text-gold transition hover:bg-gold hover:text-ink">
+                View Menu
+            </a>
+        </div>
+    </div>
+</section>
+
+@* ===== CONCEPT ===== *@
+<section class="mx-auto grid max-w-6xl items-center gap-16 px-6 py-24 md:grid-cols-2">
+    <div>
+        <SectionHeading Eyebrow="Our Philosophy" Title="Respect for the ingredient" />
+        <p class="mt-8 leading-relaxed text-mist">
+            Shiki means “four seasons.” Our menu changes with the tide and the
+            harvest, built on Edomae technique: aged fish, warm seasoned rice,
+            and nothing that doesn’t need to be there.
+        </p>
+        <p class="mt-4 leading-relaxed text-mist">
+            Every course is prepared in front of you and served at the moment
+            it is at its best.
+        </p>
+    </div>
+
+    <ImageFrame Class="aspect-[4/5]" Src="images/concept.jpg" Alt="Chef preparing nigiri" Placeholder="旬" />
+</section>
+
+@* ===== FEATURED DISHES ===== *@
+<section class="border-y border-white/10 bg-[#100e0c] py-24">
+    <div class="mx-auto max-w-6xl px-6">
+        <SectionHeading Eyebrow="Signature" Title="Featured dishes" Centered="true" />
+
+        <div class="mt-16 grid gap-6 md:grid-cols-3">
+            @foreach (var dish in dishes)
+            {
+                <DishCard Kanji="@dish.Kanji"
+                          Name="@dish.Name"
+                          Description="@dish.Description"
+                          Price="@dish.Price"
+                          Image="@dish.Image" />
+            }
+        </div>
+    </div>
+</section>
+
+@* ===== CTA BANNER ===== *@
+<section class="mx-auto max-w-4xl px-6 py-24 text-center">
+    <p class="font-serif text-3xl italic leading-relaxed text-washi md:text-4xl">
+        “Autumn has arrived at the counter. Come taste it while it lasts.”
+    </p>
+    <p class="mt-6 text-xs uppercase tracking-[0.4em] text-gold">Seasonal omakase · Now serving</p>
+    <a href="/reservation"
+       class="mt-10 inline-block rounded-sm bg-shu px-8 py-3 text-sm uppercase tracking-widest transition hover:bg-shu/80">
+        Book Your Seat
+    </a>
+</section>
+
+@code {
+    private record Dish(string Kanji, string Name, string Description, string Price, string? Image = null);
+
+    private readonly List<Dish> dishes =
+[
+    new("大", "Otoro Nigiri", "Prized fatty tuna belly, lightly aged and brushed with house nikiri.", "₱1,200", "images/otoro.jpg"),
+    new("雲", "Hokkaido Uni", "Sweet, creamy sea urchin on warm rice, wrapped in crisp nori.", "₱1,500", "images/uni.jpg"),
+    new("和", "Wagyu Tataki", "Seared A5 wagyu with ponzu, grated daikon, and fresh wasabi.", "₱1,800", "images/wagyu.jpg")
+];
+}

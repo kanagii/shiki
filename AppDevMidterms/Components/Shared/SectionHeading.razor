@@ -1,0 +1,11 @@
+<div class="@(Centered ? "text-center" : "")">
+    <p class="text-xs uppercase tracking-[0.4em] text-gold">@Eyebrow</p>
+    <h2 class="mt-4 text-4xl md:text-5xl">@Title</h2>
+    <div class="@(Centered ? "mx-auto" : "") mt-6 h-px w-16 bg-shu"></div>
+</div>
+
+@code {
+    [Parameter] public string Eyebrow { get; set; } = "";
+    [Parameter, EditorRequired] public string Title { get; set; } = "";
+    [Parameter] public bool Centered { get; set; }
+}
