@@ -482,3 +482,5 @@ $RECYCLE.BIN/
 *.swp
 
 node_modules/
+
+node_modules/
