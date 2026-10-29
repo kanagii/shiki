@@ -19,8 +19,8 @@ A sleek, dark-themed, three-page website for a fictional Edomae omakase restaura
 ## Quick Start
 
 ```powershell
-git clone https://github.com/kanagii/shiki-appdev.git
-cd shiki-appdev
+git clone https://github.com/kanagii/shiki.git
+cd shiki
 npm install
 npm run css:build
 dotnet watch
@@ -47,8 +47,8 @@ Visual Studio 2026 is recommended, but any editor works.
 ### 1. Clone the repository
 
 ```powershell
-git clone https://github.com/kanagii/shiki-appdev.git
-cd shiki-appdev
+git clone https://github.com/kanagii/shiki.git
+cd shiki
 ```
 
 > Run every command below from this folder, the one containing `AppDevMidterms.csproj` and `package.json`.
@@ -83,7 +83,7 @@ Then open the URL shown in the terminal (usually `http://localhost:5037`).
 ## Project Structure
 
 ```
-shiki-appdev/
+shiki/
 ├── Components/
 │   ├── Layout/
 │   │   └── MainLayout.razor      Navigation bar and footer
