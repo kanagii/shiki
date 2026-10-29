@@ -16,30 +16,11 @@ A sleek, dark-themed, three-page website for a fictional Edomae omakase restaura
 - **Tailwind CSS v4** (CLI build, no config file needed)
 - **Google Fonts**: Cormorant Garamond (headings) and Inter (body)
 
-## Repository Layout
-
-The repository follows the standard .NET layout: the solution sits at the root and the actual project lives in the `AppDevMidterms/` subfolder.
-
-```
-shiki-appdev/                    ← repository root
-├── AppDevMidterms/              ← the Blazor project (run all commands here)
-│   ├── Components/
-│   ├── Styles/
-│   ├── wwwroot/
-│   ├── package.json
-│   └── AppDevMidterms.csproj
-├── AppDevMidterms.slnx          ← Visual Studio solution
-├── .gitignore
-└── README.md
-```
-
-> **All `npm` and `dotnet` commands must be run inside `AppDevMidterms/`**, the folder that contains `AppDevMidterms.csproj` and `package.json`. Running them from the repository root will fail.
-
 ## Quick Start
 
 ```powershell
 git clone https://github.com/kanagii/shiki-appdev.git
-cd shiki-appdev\AppDevMidterms
+cd shiki-appdev
 npm install
 npm run css:build
 dotnet watch
@@ -47,7 +28,7 @@ dotnet watch
 
 For live styling while you edit, also run `npm run css:watch` in a second terminal. Details are in [How to Run](#how-to-run).
 
-To open it in Visual Studio instead, double-click `AppDevMidterms.slnx` in the repository root.
+To open it in Visual Studio, use **File → Open → Project/Solution** and select `AppDevMidterms.csproj`.
 
 ## Prerequisites
 
@@ -67,10 +48,10 @@ Visual Studio 2026 is recommended, but any editor works.
 
 ```powershell
 git clone https://github.com/kanagii/shiki-appdev.git
-cd shiki-appdev\AppDevMidterms
+cd shiki-appdev
 ```
 
-> `AppDevMidterms/` (inside the cloned repository) is the project folder, the one containing `AppDevMidterms.csproj` and `package.json`. Stay in it for every step below.
+> Run every command below from this folder, the one containing `AppDevMidterms.csproj` and `package.json`.
 
 ### 2. Install the Tailwind dependencies (first time only)
 
@@ -101,10 +82,8 @@ Then open the URL shown in the terminal (usually `http://localhost:5037`).
 
 ## Project Structure
 
-Contents of the `AppDevMidterms/` project folder:
-
 ```
-AppDevMidterms/
+shiki-appdev/
 ├── Components/
 │   ├── Layout/
 │   │   └── MainLayout.razor      Navigation bar and footer
@@ -125,7 +104,10 @@ AppDevMidterms/
 │   ├── app.css                   Blazor validation and error styles
 │   └── tailwind.css              Generated file, do not edit by hand
 ├── package.json                  Tailwind build scripts
-└── Program.cs
+├── AppDevMidterms.csproj         Project file
+├── Program.cs
+├── .gitignore
+└── README.md
 ```
 
 ## Design System
